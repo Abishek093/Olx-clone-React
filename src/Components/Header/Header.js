@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useContext } from "react";
 
-import './Header.css';
-import OlxLogo from '../../assets/OlxLogo';
-import Search from '../../assets/Search';
-import Arrow from '../../assets/Arrow';
-import SellButton from '../../assets/SellButton';
-import SellButtonPlus from '../../assets/SellButtonPlus';
+import "./Header.css";
+import OlxLogo from "../../assets/OlxLogo";
+import Search from "../../assets/Search";
+import Arrow from "../../assets/Arrow";
+import SellButton from "../../assets/SellButton";
+import SellButtonPlus from "../../assets/SellButtonPlus";
+import { AuthContext } from "../../store/Context";
+import { auth } from "../../firebase/config";
+import { useNavigate } from "react-router-dom";
+
 function Header() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   return (
     <div className="headerParentDiv">
       <div className="headerChildDiv">
@@ -34,17 +41,43 @@ function Header() {
           <Arrow></Arrow>
         </div>
         <div className="loginPage">
-          <span>Login</span>
+          <span>
+            {user ? (
+              `Welcome ${user.displayName}`
+            ) : (
+              <span onClick={() => navigate("/login")}>Login</span>
+            )}
+          </span>
           <hr />
         </div>
+        {user && (
+          <span
+            onClick={() => {
+              auth.signOut();
+              navigate("/login");
+            }}
+          >
+            Logout
+          </span>
+        )}
 
-        <div className="sellMenu">
-          <SellButton></SellButton>
-          <div className="sellMenuContent">
-            <SellButtonPlus></SellButtonPlus>
-            <span>SELL</span>
+        {user ? (
+          <div className="sellMenu">
+            <SellButton></SellButton>
+            <div className="sellMenuContent">
+              <SellButtonPlus></SellButtonPlus>
+              <span
+            onClick={() => {
+              navigate("/create");
+            }}
+          >
+            SELL
+          </span>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   );

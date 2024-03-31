@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import Logo from '../../olx-logo.png';
 import './Login.css';
-// import { FirebaseContext } from '../../store/Context';
-import { useNavigate } from 'react-router-dom'
-import { signInWithEmailAndPassword } from 'firebase/auth'; //handling user login
+import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth'; // Import the specific functions
 import { auth } from '../../firebase/config';
 
 function Login() {
@@ -11,8 +10,6 @@ function Login() {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  // const { Firebase, db } = useContext(FirebaseContext);
-  
   const navigate = useNavigate();
 
   const handleSignup = () => {
@@ -54,10 +51,13 @@ function Login() {
           <label htmlFor="email">Email</label>
           <br />
           <input
-            className="input"
+            className={`input ${emailError ? 'error' : ''}`}
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setEmailError('');
+            }}
             id="email"
             name="email"
           />
@@ -67,10 +67,13 @@ function Login() {
           <label htmlFor="password">Password</label>
           <br />
           <input
-            className="input"
+            className={`input ${passwordError ? 'error' : ''}`}
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setPasswordError('');
+            }}
             id="password"
             name="password"
           />
